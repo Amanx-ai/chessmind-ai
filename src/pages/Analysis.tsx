@@ -9,21 +9,39 @@ function Analysis() {
 
   const moves = game.history();
 
+  const currentTurn =
+    game.turn() === "w"
+      ? "White to Move"
+      : "Black to Move";
+
   return (
     <div className="container">
       <h1>Analysis Board</h1>
-       <div className="analysis-layout">
-      <ChessBoard
-        game={game}
-        setGame={setGame}
-      />
 
-      <MoveHistory moves={moves} />
-    </div> 
+      <p>{currentTurn}</p>
 
-    <button onClick={() => setGame(new Chess())}>
-    New Game
-    </button> 
+      <div className="analysis-layout">
+        <ChessBoard
+          game={game}
+          setGame={setGame}
+        />
+
+        <div className="sidebar">
+          <MoveHistory moves={moves} />
+
+          <button onClick={() => setGame(new Chess())}>
+            New Game
+          </button>
+
+          <button disabled>
+            Undo
+          </button>
+
+          <button disabled>
+            Redo
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

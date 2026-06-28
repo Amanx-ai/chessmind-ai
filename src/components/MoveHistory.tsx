@@ -4,18 +4,16 @@ type MoveHistoryProps = {
 
 function MoveHistory({ moves }: MoveHistoryProps) {
   return (
-    <div>
+    <div className="move-history">
       <h2>Move History</h2>
 
-      {moves.length === 0 ? (
-        <p>No moves yet</p>
-      ) : (
-        <ol>
-          {moves.map((move, index) => (
-            <li key={index}>{move}</li>
-          ))}
-        </ol>
-      )}
+      <div className="moves-list">
+        {moves.map((move, index) => (
+            <span key={index}>
+            {index + 1}. {move}
+            </span>
+        ))}
+        </div>
     </div>
   );
 }
