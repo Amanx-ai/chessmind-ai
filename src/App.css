@@ -2,15 +2,18 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 20px;
+
   background-color: #111827;
   color: white;
+
+  padding: 30px;
 }
 
 h1 {
   font-size: 3rem;
+  margin: 0;
 }
 
 .subtitle {
@@ -40,3 +43,4 @@ button:hover {
   background-color: #1d4ed8;
   transform: translateY(-2px);
 }
+

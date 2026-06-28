@@ -1,20 +1,8 @@
-import './App.css'
+import "./App.css";
+import Home from "./pages/Home";
 
 function App() {
-  return (
-    <div className="container">
-      <h1>ChessMind AI</h1>
-
-      <p className="subtitle">
-      Play, Analyze and Improve with AI
-      </p>
-
-      <div className="buttons">
-        <button>Start Playing</button>
-        <button>Analyze Position</button>
-      </div>
-    </div>
-  )
+  return <Home />;
 }
 
-export default App
+export default App;
