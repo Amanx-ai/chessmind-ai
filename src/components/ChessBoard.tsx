@@ -1,13 +1,16 @@
-import { useState } from "react";
-import { Chess } from "chess.js";
 import { Chessboard } from "react-chessboard";
+import { Chess } from "chess.js";
 
-function ChessBoard() {
-  const [game, setGame] = useState(new Chess());
+type ChessBoardProps = {
+  game: Chess;
+  setGame: React.Dispatch<React.SetStateAction<Chess>>;
+};
 
+function ChessBoard({ game, setGame }: ChessBoardProps) {
   const chessboardOptions = {
     id: "BasicBoard",
     position: game.fen(),
+
     onPieceDrop: ({
       sourceSquare,
       targetSquare,
@@ -15,9 +18,11 @@ function ChessBoard() {
       sourceSquare: string;
       targetSquare: string | null;
     }) => {
-      if (!targetSquare) return false; // dropped off the board
+      if (!targetSquare) return false;
 
-      const gameCopy = new Chess(game.fen());
+      const gameCopy = new Chess();
+
+      gameCopy.loadPgn(game.pgn());
 
       try {
         gameCopy.move({
@@ -25,10 +30,12 @@ function ChessBoard() {
           to: targetSquare,
           promotion: "q",
         });
+
         setGame(gameCopy);
+
         return true;
       } catch {
-        return false; // illegal move
+        return false;
       }
     },
   };
