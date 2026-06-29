@@ -17,11 +17,36 @@ function Analysis() {
       ? "White to Move"
       : "Black to Move";
 
+  let gameStatus = "";
+
+  if (game.isCheckmate()) {
+    gameStatus = "Checkmate!";
+  } else if (game.isCheck()) {
+    gameStatus = "Check!";
+  } else if (game.isStalemate()) {
+    gameStatus = "Stalemate!";
+  }
+
   return (
     <div className="container">
       <h1>Analysis Board</h1>
 
-      <p>{currentTurn}</p>
+      {game.isCheckmate() ? (
+        <p>
+          Checkmate!{" "}
+          {game.turn() === "w"
+            ? "Black Wins"
+            : "White Wins"}
+        </p>
+      ) : (
+        <>
+          <p>{currentTurn}</p>
+
+          {gameStatus && (
+            <h2>{gameStatus}</h2>
+          )}
+        </>
+      )}
 
       <div className="analysis-layout">
         <ChessBoard
