@@ -33,7 +33,18 @@ function Analysis() {
             New Game
           </button>
 
-          <button disabled>
+          <button
+            disabled={moves.length === 0}
+            onClick={() => {
+              const gameCopy = new Chess();
+
+              gameCopy.loadPgn(game.pgn());
+
+              gameCopy.undo();
+
+              setGame(gameCopy);
+            }}
+          >
             Undo
           </button>
 
