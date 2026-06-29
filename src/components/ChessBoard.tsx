@@ -4,12 +4,18 @@ import { Chess } from "chess.js";
 type ChessBoardProps = {
   game: Chess;
   setGame: React.Dispatch<React.SetStateAction<Chess>>;
+  boardOrientation: "white" | "black";
 };
 
-function ChessBoard({ game, setGame }: ChessBoardProps) {
+function ChessBoard({
+  game,
+  setGame,
+  boardOrientation,
+}: ChessBoardProps) {
   const chessboardOptions = {
     id: "BasicBoard",
     position: game.fen(),
+    boardOrientation: boardOrientation,
 
     onPieceDrop: ({
       sourceSquare,

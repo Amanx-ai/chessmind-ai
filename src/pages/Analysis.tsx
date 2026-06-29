@@ -7,6 +7,9 @@ import MoveHistory from "../components/MoveHistory";
 function Analysis() {
   const [game, setGame] = useState(new Chess());
 
+  const [boardOrientation, setBoardOrientation] =
+    useState<"white" | "black">("white");
+
   const moves = game.history();
 
   const currentTurn =
@@ -24,6 +27,7 @@ function Analysis() {
         <ChessBoard
           game={game}
           setGame={setGame}
+          boardOrientation={boardOrientation}
         />
 
         <div className="sidebar">
@@ -50,6 +54,18 @@ function Analysis() {
 
           <button disabled>
             Redo
+          </button>
+
+          <button
+            onClick={() =>
+              setBoardOrientation(
+                boardOrientation === "white"
+                  ? "black"
+                  : "white"
+              )
+            }
+          >
+            Flip Board
           </button>
         </div>
       </div>
