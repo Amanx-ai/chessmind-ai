@@ -1,5 +1,6 @@
-import { Chessboard } from "react-chessboard";
+import { useState } from "react";
 import { Chess } from "chess.js";
+import { Chessboard } from "react-chessboard";
 
 type ChessBoardProps = {
   game: Chess;
@@ -12,10 +13,65 @@ function ChessBoard({
   setGame,
   boardOrientation,
 }: ChessBoardProps) {
+  const [selectedSquare, setSelectedSquare] =
+    useState<string | null>(null);
+
+  const legalMoves =
+    selectedSquare
+      ? game.moves({
+          square: selectedSquare as any,
+          verbose: true,
+        })
+      : [];
+
+  const squareStyles: Record<string, React.CSSProperties> = {};
+
+  legalMoves.forEach((move: any) => {
+    squareStyles[move.to] = {
+      background:
+        "radial-gradient(circle, rgba(0,255,0,0.7) 0%, rgba(0,255,0,0.7) 25%, transparent 26%)",
+    };
+  });
+
+  if (selectedSquare) {
+    squareStyles[selectedSquare] = {
+      backgroundColor: "rgba(255,255,0,0.4)",
+    };
+  }
+
   const chessboardOptions = {
     id: "BasicBoard",
     position: game.fen(),
-    boardOrientation: boardOrientation,
+    boardOrientation,
+
+    squareStyles,
+
+    onSquareClick: ({
+      square,
+    }: {
+      square: string;
+    }) => {
+      if (!selectedSquare) {
+        setSelectedSquare(square);
+        return;
+      }
+
+      const gameCopy = new Chess();
+      gameCopy.loadPgn(game.pgn());
+
+      try {
+        gameCopy.move({
+          from: selectedSquare,
+          to: square,
+          promotion: "q",
+        });
+
+        setGame(gameCopy);
+        setSelectedSquare(null);
+      } catch {
+        setSelectedSquare(square);
+      }
+    },
 
     onPieceDrop: ({
       sourceSquare,
@@ -27,7 +83,6 @@ function ChessBoard({
       if (!targetSquare) return false;
 
       const gameCopy = new Chess();
-
       gameCopy.loadPgn(game.pgn());
 
       try {
@@ -38,6 +93,7 @@ function ChessBoard({
         });
 
         setGame(gameCopy);
+        setSelectedSquare(null);
 
         return true;
       } catch {
