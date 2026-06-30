@@ -14,3 +14,11 @@ def ping():
 @router.get("/service-status")
 def service_status():
     return stockfish.ping()
+
+@router.get("/best-move")
+def best_move():
+    return {
+        "best_move": stockfish.get_best_move(
+            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        )
+    }    
