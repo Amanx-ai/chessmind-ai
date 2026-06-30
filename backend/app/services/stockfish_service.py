@@ -16,3 +16,10 @@ class StockfishService:
     def get_evaluation(self, fen: str):
         self.stockfish.set_fen_position(fen)
         return self.stockfish.get_evaluation()
+
+    def analyze_position(self, fen: str):
+        return {
+            "best_move": self.get_best_move(fen),
+            "evaluation": self.get_evaluation(fen),
+            "depth": 15
+        }

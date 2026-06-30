@@ -1,4 +1,6 @@
 from fastapi import APIRouter
+from pydantic import BaseModel
+
 from app.services.stockfish_service import StockfishService
 
 router = APIRouter()
@@ -6,13 +8,10 @@ router = APIRouter()
 stockfish = StockfishService()
 
 
-@router.get("/best-move")
-def best_move(fen: str):
-    return {
-        "best_move": stockfish.get_best_move(fen)
-    }
+class AnalysisRequest(BaseModel):
+    fen: str
 
 
-@router.get("/evaluation")
-def evaluation(fen: str):
-    return stockfish.get_evaluation(fen)
+@router.post("/")
+def analyze_position(request: AnalysisRequest):
+    return stockfish.analyze_position(request.fen)
