@@ -7,10 +7,42 @@ import MoveHistory from "../components/MoveHistory";
 function Analysis() {
   const [game, setGame] = useState(new Chess());
 
+  const [analysis, setAnalysis] = useState<{
+    best_move: string;
+    evaluation: {
+      type: string;
+      value: number;
+    };
+    depth: number;
+  } | null>(null);
+
   const [boardOrientation, setBoardOrientation] =
     useState<"white" | "black">("white");
 
   const moves = game.history();
+
+  const analyzePosition = async () => {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/analysis/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fen: game.fen(),
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      setAnalysis(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const currentTurn =
     game.turn() === "w"
@@ -58,6 +90,24 @@ function Analysis() {
         <div className="sidebar">
           <MoveHistory moves={moves} />
 
+          {analysis && (
+            <div>
+              <h3>Engine Analysis</h3>
+
+              <p>
+                Best Move: {analysis.best_move}
+              </p>
+
+              <p>
+                Evaluation: {(analysis.evaluation.value / 100).toFixed(2)}
+              </p>
+
+              <p>
+                Depth: {analysis.depth}
+              </p>
+            </div>
+          )}
+
           <button onClick={() => setGame(new Chess())}>
             New Game
           </button>
@@ -79,6 +129,10 @@ function Analysis() {
 
           <button disabled>
             Redo
+          </button>
+
+          <button onClick={analyzePosition}>
+            Analyze Position
           </button>
 
           <button
