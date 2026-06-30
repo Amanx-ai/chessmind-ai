@@ -7,12 +7,12 @@ class StockfishService:
             path="engine/stockfish-windows-x86-64-avx2.exe"
         )
 
-    def ping(self):
-        return {
-            "service": "stockfish",
-            "status": "ready"
-        }
+        self.stockfish.set_depth(15)
 
     def get_best_move(self, fen: str):
         self.stockfish.set_fen_position(fen)
         return self.stockfish.get_best_move()
+
+    def get_evaluation(self, fen: str):
+        self.stockfish.set_fen_position(fen)
+        return self.stockfish.get_evaluation()
